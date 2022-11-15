@@ -17,6 +17,7 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           registry-type: public
           aws-region: sa-east-1
+          region: sa-east-1
             
       - name: Build, tag, and push docker image to Amazon ECR Public
         env:                                                                    
