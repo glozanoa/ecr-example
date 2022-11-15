@@ -1,0 +1,30 @@
+name: Push container to AWS ECR
+
+on: [push]
+
+jobs:
+  build:
+    name: Build container and push to ECR
+    runs-on: ubuntu-latest  
+
+    steps:      
+      - name: Login to Amazon ECR Public          
+        id: login-ecr-public
+        uses: aws-actions/amazon-ecr-login@v1        
+        with:        
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}          
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          registry-type: public
+          aws-region: us-east-1
+            
+      - name: Build, tag, and push docker image to Amazon ECR Public
+        env:                                                                    
+          REGISTRY: ${{ steps.login-ecr-public.outputs.registry }}            
+          REGISTRY_ALIAS: c8u0z3y0                                                        
+          REPOSITORY: example                                                      
+          IMAGE_TAG: ${{ github.sha }}
+                                        
+        run: |
+          echo -e "REGISTRY: ${REGISTRY}, REGISTRY_ALIAS: ${REGISTRY_ALIAS}, IMAGE_TAG: ${IMAGE_TAG}"
+          docker build -t $REGISTRY/$REGISTRY_ALIAS/$REPOSITORY:$IMAGE_TAG .              
+          docker push $REGISTRY/$REGISTRY_ALIAS/$REPOSITORY:$IMAGE_TAG
