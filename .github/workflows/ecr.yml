@@ -7,7 +7,8 @@ jobs:
     name: Build container and push to ECR
     runs-on: ubuntu-latest  
 
-    steps:      
+    steps:     
+      - uses: actions/checkout@v3 
       - name: Login to Amazon ECR Public          
         id: login-ecr-public
         uses: aws-actions/amazon-ecr-login@v1        
@@ -15,7 +16,7 @@ jobs:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}          
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           registry-type: public
-          aws-region: us-east-1
+          aws-region: sa-east-1
             
       - name: Build, tag, and push docker image to Amazon ECR Public
         env:                                                                    
